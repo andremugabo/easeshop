@@ -18,10 +18,14 @@ public class ShopEaseRouterController {
     public String products(){
         return "products/index";
     }
-
-
     @GetMapping("/sales")
     public String sales(){
         return "sales/index";
     }
+    @GetMapping("/login")
+    public String login(){
+        return "auth/login";
+    }
+
+
 }
