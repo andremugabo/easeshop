@@ -4,18 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="ShopEase – Your go-to platform for simple and secure online shopping.">
-    <link rel="icon" type="image/png" href="/favicon.png">
-
-    <title th:text="${pageTitle} ?: 'ShopEase - Simple Online Shopping'">Sales-ShopEase</title>
-
+    <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
+    <title>ShopEase-Signup</title>
     <!-- Bootstrap & Font Awesome -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" integrity="sha384-..." crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" th:href="@{/css/styles.css}"  />
-
-   
 </head>
-
 <body>
 <header class="bg-white sticky-top shadow-sm">
     <div class="container">
@@ -70,13 +65,8 @@
                         <button class="action-btn dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user"></i>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><h6 class="dropdown-header">Hello, <span>John</span>!</h6></li>
-                            <li><a class="dropdown-item" th:href="@{/profile}"><i class="fas fa-user me-2"></i>Profile</a></li>
-                            <li><a class="dropdown-item" th:href="@{/orders}"><i class="fas fa-box me-2"></i>Orders</a></li>
-                            <li><a class="dropdown-item" th:href="@{/wishlist}"><i class="fas fa-heart me-2"></i>Wishlist</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end" id="dropdown" aria-labelledby="userDropdown">
+
                         </ul>
                     </div>
                 </div>
@@ -86,6 +76,75 @@
 </header>
 
 
+<main class="mb-4">
+
+    <div class="container mt-5 p-4 border rounded" style="max-width: 500px;">
+        <h2 class="text-center fw-bold text-success mb-4">ShopEase</h2>
+        
+        <div class="alert alert-success" role="alert" th:if="${message}">
+            <h4 th:text="${message}"></h4>
+        </div>
+
+        <div class="alert alert-danger" role="alert" th:if="${error}">
+            <h4 th:text="${error}"></h4>
+        </div>
+
+        <h4 class="fw-semibold">Create an account</h4>
+        <p class="text-muted">Enter your information to create an account</p>
+
+        <form th:action="@{/customer/signup}" th:object="${customer}" method="post">
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label for="firstname" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="firstname" placeholder="Enter your first name" th:field="*{firstName}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="lastname" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastname" placeholder="Enter your last name" th:field="*{lastName}" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="username@email.com" th:field="*{email}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="phonenumber" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phonenumber" th:field="*{phoneNumber}" placeholder="Enter your phone number remember to start with country code">
+                <small class="form-text text-muted">Include country code (e.g., +250 for Rwanda)</small>
+            </div>
+
+            <div class="mb-2">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Enter your password">
+                <small class="form-text text-muted">Password must be at least 8 characters long</small>
+            </div>
+
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirm your password">
+            </div>
+
+            <!-- <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="agreeCheck">
+                <label class="form-check-label" for="agreeCheck">
+                    I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                </label>
+            </div> -->
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success">Create Account</button>
+            </div>
+        </form>
+
+        <div class="text-center mt-3">
+            <span>Already have an account? <a th:href="@{/login}" class="text-success">Sign in</a></span>
+        </div>
+    </div>
+
+
+</main>
 
 
 
@@ -146,9 +205,6 @@
         </div>
     </div>
 </footer>
-
-
-
 <script th:src="@{/js/index.js}"></script>
 <!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
