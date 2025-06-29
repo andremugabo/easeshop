@@ -4,6 +4,7 @@ package com.ma.codinglab.shopease.core.customer.model;
 import core.base.AbstractBaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,4 +23,6 @@ public class Customer extends AbstractBaseEntity {
     private String phoneNumber;
     @Column(name = "password")
     private String password;
+    @Transient
+    private String confirmPassword;
 }

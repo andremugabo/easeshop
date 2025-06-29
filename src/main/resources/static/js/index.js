@@ -25,6 +25,19 @@ if (isLogin) {
     `;
 }
 
+
+
+document.querySelector("form").addEventListener("submit", function(e) {
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert("Passwords do not match!");
+        }
+    });
+
+
+
 dropdown.innerHTML = dropdownContent;
 
 console.log(dropdown);

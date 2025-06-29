@@ -26,6 +26,21 @@ public class ShopEaseRouterController {
     public String login(){
         return "auth/login";
     }
-
+//    @GetMapping("/signup")
+//    public String signup(){
+//        return "auth/signup";
+//    }
+    @GetMapping("/forgotPassword")
+    public String forgotPassword(){
+        return "auth/forgot-password";
+    }
+    @GetMapping("/resetPassword")
+    public String resetPassword(){
+        return "auth/reset-password";
+    }
+    @GetMapping("/verifyOtp")
+    public String verifyOtp(){
+        return "auth/verify-otp";
+    }
 
 }
