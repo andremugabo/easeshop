@@ -3,6 +3,9 @@ package com.ma.codinglab.shopease.controller.customer;
 import com.ma.codinglab.shopease.core.customer.model.Customer;
 import com.ma.codinglab.shopease.core.customer.service.ICustomerService;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +56,9 @@ public class CustomerController {
     }
 
     @GetMapping("/customerPage")
-    public String customerPage(){
+    public String customerPage(Model model){
+        List<Customer> customers = customerService.findCustomersByActive(Boolean.TRUE);
+        model.addAttribute("customers", customers);
         return "admin/customerPage";
     }
 }

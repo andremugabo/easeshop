@@ -212,7 +212,7 @@
         <table class="table align-middle">
           <thead class="table-light">
           <tr>
-            <th>Customer ID</th>
+            <th>#</th>
             <th>Names</th>
             <th>Email</th>
             <th>Status</th>
@@ -222,10 +222,10 @@
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td>CUST-001</td>
-            <td>John Doe</td>
-            <td>john@email.com</td>
+          <tr th:each="customer, stat :${customers}">
+            <td th:text="${stat.count}"></td>
+            <td th:text="${customer.firstName + customer.lastName }"></td>
+            <td th:text="${customer.email}"></td>
             <td><span class="status-badge">Active</span></td>
             <td>12</td>
             <td>20,000 Frw</td>
