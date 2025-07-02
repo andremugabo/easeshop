@@ -14,7 +14,7 @@ import java.util.UUID;
 public abstract  class AbstractBaseEntity extends  AbstractAuditEntity{
     @Id
     @UuidGenerator
-    private UUID Id;
+    private UUID id;
     @Column(name = "active", nullable = false)
     private boolean active = Boolean.TRUE;
 }
