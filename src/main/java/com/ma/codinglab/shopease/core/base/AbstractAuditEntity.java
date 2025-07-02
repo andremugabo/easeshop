@@ -1,6 +1,5 @@
 package com.ma.codinglab.shopease.core.base;
 
-
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +18,7 @@ public class AbstractAuditEntity {
     @LastModifiedDate
     private LocalDateTime updatedAt;
     @CreatedBy
-    private String createBy;
+    private String createdBy;
     @LastModifiedBy
     private String modifiedBy;
 }

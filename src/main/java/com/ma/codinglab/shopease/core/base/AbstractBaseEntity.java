@@ -8,12 +8,13 @@ import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
+
 @Getter @Setter
 @MappedSuperclass
-public abstract class AbstractBaseEntity extends AbstractAuditEntity {
-    @UuidGenerator
+public abstract  class AbstractBaseEntity extends  AbstractAuditEntity{
     @Id
-    private UUID Id;
-    @Column(name = "active",nullable = false)
-    private Boolean active = Boolean.TRUE;
+    @UuidGenerator
+    private UUID id;
+    @Column(name = "active", nullable = false)
+    private boolean active = Boolean.TRUE;
 }
