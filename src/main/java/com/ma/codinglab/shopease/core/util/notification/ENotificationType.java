@@ -1,0 +1,28 @@
+package com.ma.codinglab.shopease.core.util.notification;
+
+public enum ENotificationType {
+    ORDER_CONFIRMATION,
+    ORDER_SHIPPED,
+    ORDER_DELIVERED,
+    ORDER_CANCELLED,
+
+    PAYMENT_SUCCESS,
+    PAYMENT_FAILED,
+    PAYMENT_PENDING,
+
+    ACCOUNT_VERIFICATION,
+    PASSWORD_RESET,
+    OTP_VERIFICATION,
+
+
+    PROMOTION,
+    DISCOUNT,
+    ANNOUNCEMENT,
+
+    MESSAGE,
+    COMMENT,
+    REPLY,
+
+    REVIEW_RECEIVED,
+    SUPPORT_TICKET_UPDATE
+}

@@ -1,7 +1,7 @@
 package com.ma.codinglab.shopease.core.customer.model;
 
 
-import core.base.AbstractBaseEntity;
+import com.ma.codinglab.shopease.core.base.AbstractBaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;
