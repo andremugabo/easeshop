@@ -61,4 +61,14 @@ public class CustomerController {
         model.addAttribute("customers", customers);
         return "admin/customerPage";
     }
+
+    @GetMapping("/productPage")
+    public String productPage(Model model){
+        return"admin/productPage";
+    }
+
+//    @GetMapping("/productTypePage")
+//    public String productTypePage(Model model){
+//        return"admin/productTypePage";
+//    }
 }

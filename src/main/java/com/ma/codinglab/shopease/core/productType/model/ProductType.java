@@ -16,8 +16,9 @@ import java.util.List;
 @Table(name = "producttype")
 public class ProductType extends AbstractBaseEntity {
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private EProductType productType;
+    private String productType;
+    @Column(columnDefinition = "TEXT")
+    private String description;
     @OneToMany(mappedBy = "id")
     private List<ProductCategory> productCategory;
 }

@@ -153,18 +153,50 @@
   </div>
 
   <nav class="nav flex-column gap-2">
-    <a href="#" class="nav-link active"><i class="fas fa-table-columns"></i><span>Dashboard</span></a>
-    <a href="#" class="nav-link"><i class="fas fa-box"></i><span>Products</span></a>
-    <a href="#" class="nav-link"><i class="fas fa-shopping-cart"></i><span>Orders</span></a>
-    <a href="#" class="nav-link"><i class="fas fa-user"></i><span>Customers</span></a>
-    <a href="#" class="nav-link"><i class="fas fa-chart-line"></i><span>Analytics</span></a>
-    <a href="#" class="nav-link"><i class="fas fa-cog"></i><span>Settings</span></a>
+    <a th:href="@{/dashboard}" class="nav-link">
+      <i class="fas fa-tachometer-alt me-2"></i><span>Dashboard</span>
+    </a>
+    <a th:href="@{/productType/productTypePage}" class="nav-link">
+      <i class="fas fa-list me-2"></i><span>Product Type</span>
+    </a>
+    <a th:href="@{/productCategory/productCategoryPage}" class="nav-link">
+      <i class="fas fa-tags me-2"></i><span>Categories</span>
+    </a>
+    <a th:href="@{/warehouse/warehousePage}" class="nav-link">
+      <i class="fas fa-warehouse me-2"></i><span>Warehouses</span>
+    </a>
+    <a th:href="@{/product/productPage}" class="nav-link">
+      <i class="fas fa-box-open me-2"></i><span>Products</span>
+    </a>
+    <a th:href="@{/order/orderPage}" class="nav-link">
+      <i class="fas fa-shopping-cart me-2"></i><span>Orders</span>
+    </a>
+    <a th:href="@{/review/reviewPage}" class="nav-link">
+      <i class="fas fa-star me-2"></i><span>Reviews</span>
+    </a>
+    <a th:href="@{/payment/paymentPage}" class="nav-link">
+      <i class="fas fa-credit-card me-2"></i><span>Payments</span>
+    </a>
+    <a th:href="@{/user/userPage}" class="nav-link active">
+      <i class="fas fa-users me-2"></i><span>Users</span>
+    </a>
+    <a th:href="@{/product/analyticsPage}" class="nav-link">
+      <i class="fas fa-chart-pie me-2"></i><span>Analytics</span>
+    </a>
+    <a th:href="@{/notification/notificationPage}" class="nav-link">
+      <i class="fas fa-bell me-2"></i><span>Notifications</span>
+    </a>
+    <a th:href="@{/address/addressPage}" class="nav-link">
+      <i class="fas fa-map-marker-alt me-2"></i><span>Address</span>
+    </a>
+    <a th:href="@{/user/settingsPage}" class="nav-link">
+      <i class="fas fa-cog me-2"></i><span>Settings</span>
+    </a>
   </nav>
 
-  <div class="logout pt-4">
+  <div class="logout pt-3">
     <a href="#" class="nav-link d-flex align-items-center gap-2 text-dark">
-      <i class="fas fa-sign-out-alt"></i>
-      <span>Logout</span>
+      <i class="fas fa-sign-out-alt me-2"></i><span>Logout</span>
     </a>
   </div>
 </aside>
@@ -173,52 +205,29 @@
 <!-- Main Content -->
 <main class="main-content">
   <div class="header-top mb-4">
-    <h3>Customers</h3>
-    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
-      + Add Customer
+    <h3>Users</h3>
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
+      + Add User
     </button>
   </div>
 
-  <!-- Metrics -->
-  <div class="row g-4 mb-4">
-    <div class="col-md-4">
-      <div class="metric-card">
-        <div class="fw-bold">Total Customers</div>
-        <div class="fs-3">1,208</div>
-        <div class="text-success">+20.2% from last month</div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="metric-card">
-        <div class="fw-bold">Average Order</div>
-        <div class="fs-3">2,350</div>
-        <div class="text-danger">-10.2% from last month</div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="metric-card">
-        <div class="fw-bold">Repeat Purchase Rate</div>
-        <div class="fs-3">64%</div>
-        <div class="text-success">+5.2% from last month</div>
-      </div>
-    </div>
-  </div>
 
   <!-- Customer Table -->
   <div class="card">
     <div class="card-body">
-      <h5 class="card-title">Customer Management</h5>
-      <p class="card-text">View and manage your customer base.</p>
+      <h5 class="card-title">Users Management</h5>
+      <p class="card-text">View and manage your user base.</p>
 
       <!-- Filter & Search -->
       <div class="d-flex mb-3">
-        <input type="text" id="searchInput" class="form-control me-2" placeholder="Search customers..." />
+        <input type="text" id="searchInput" class="form-control me-2" placeholder="Search users..." />
         <select class="form-select" style="width: 200px;">
           <option>All Statuses</option>
           <option>Active</option>
           <option>Inactive</option>
         </select>
       </div>
+
 
       <!-- Table -->
       <div class="table-responsive">
@@ -228,20 +237,22 @@
             <th>#</th>
             <th>Names</th>
             <th>Email</th>
+            <th>Role</th>
             <th>Status</th>
-            <th>Orders</th>
-            <th>Total Spent</th>
+            <th>Joined</th>
             <th>Actions</th>
           </tr>
           </thead>
           <tbody>
-          <tr th:each="customer, stat :${customers}">
-            <td th:text="${stat.count}"></td>
-            <td th:text="${customer.firstName + customer.lastName }"></td>
-            <td th:text="${customer.email}"></td>
-            <td><span class="status-badge">Active</span></td>
-            <td>12</td>
-            <td>20,000 Frw</td>
+          <tr th:each="user, stat : ${users}">
+            <td th:text="${stat.count}">1</td>
+            <td th:text="${user.firstname + ' ' + user.lastname}">John Doe</td>
+            <td th:text="${user.email}">john@example.com</td>
+            <td th:text="${user.role}">Admin</td>
+            <td>
+              <span class="status-badge" th:text="${user.active} ? 'Active' : 'Inactive'">Active</span>
+            </td>
+            <td th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd')}">2025-07-03</td>
             <td>
               <div class="dropdown">
                 <span class="action-dropdown" data-bs-toggle="dropdown">⋯</span>
@@ -252,36 +263,51 @@
               </div>
             </td>
           </tr>
-          <!-- Repeat as needed -->
           </tbody>
         </table>
       </div>
+
     </div>
   </div>
 </main>
 
-<!-- Add Customer Modal -->
-<div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addCustomerModalLabel">Add New Customer</h5>
+        <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <input type="text" class="form-control mb-2" placeholder="Full Name" required />
-        <input type="email" class="form-control mb-2" placeholder="Email" required />
-        <select class="form-select">
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-        </select>
+        <!-- Form inputs for user details -->
+        <div class="mb-3">
+          <label for="firstName" class="form-label">First Name</label>
+          <input type="text" class="form-control" id="firstName" name="firstName" />
+        </div>
+        <div class="mb-3">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="lastName" name="lastName" />
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email" />
+        </div>
+        <div class="mb-3">
+          <label for="role" class="form-label">Role</label>
+          <select class="form-select" id="role" name="role">
+            <option>User</option>
+            <option>Admin</option>
+          </select>
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-success">Save Customer</button>
+        <button type="submit" class="btn btn-primary">Save User</button>
       </div>
     </form>
   </div>
 </div>
+
 
 <!-- Scripts -->
 <script th:src="@{/js/index.js}"></script>

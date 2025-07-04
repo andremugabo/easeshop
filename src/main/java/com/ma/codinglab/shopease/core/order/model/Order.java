@@ -21,7 +21,7 @@ public class Order extends AbstractBaseEntity {
     private LocalDateTime date;
     private EOrderStatus orderStatus;
     private Integer quantity;
-
+    private Double totalAmount;
     @ManyToOne
     @JoinColumn(name = "Product_id")
     private Product product;

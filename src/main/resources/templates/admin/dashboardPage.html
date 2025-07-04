@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ShopEase – Your go-to platform for simple and secure online shopping." />
+  <link rel="icon" type="image/png" th:href="@{/images/logo.png}" />
+  <title>ShopEase – Login</title>
+
+  <!-- Bootstrap & Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .action-btn {
+      background: transparent;
+      border: none;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .metric-card {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .sidebar {
+      width: 220px;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      height: 100%;
+      background: #fff;
+      padding: 2rem 1rem;
+      border-right: 1px solid #ddd;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: #333;
+      text-decoration: none;
+    }
+
+    .sidebar a.active {
+      background-color: #e0f7e9;
+      font-weight: 600;
+    }
+
+    .main-content {
+      margin-left: 240px;
+      padding: 2rem;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status-badge {
+      padding: 0.25em 0.5em;
+      background-color: #d1f7d1;
+      border-radius: 0.25rem;
+      font-weight: 500;
+    }
+
+    .action-dropdown {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+<!-- Header -->
+<header class="bg-white sticky-top shadow-sm">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg py-1">
+      <!-- Logo -->
+      <a th:href="@{/}" class="navbar-brand d-flex align-items-center fw-semibold fs-4">
+        <i class="fas fa-cart-shopping text-success me-2"></i> ShopEase
+      </a>
+
+      <!-- Mobile Toggle -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navigation Links -->
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/categories}">Categories</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/products}">All Products</a></li>
+          <li class="nav-item"><a class="nav-link text-danger fw-semibold" th:href="@{/sales}">Sale</a></li>
+        </ul>
+
+        <!-- Search -->
+        <form class="d-flex me-3" th:action="@{/search}" method="get" role="search">
+          <input class="form-control me-2" type="search" name="query" placeholder="Search products..." />
+          <button class="btn btn-outline-primary" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+
+        <!-- Action Icons -->
+        <div class="d-flex align-items-center gap-2">
+          <a th:href="@{/wishlist}" class="action-btn" aria-label="Wishlist">
+            <i class="far fa-heart fs-5"></i>
+          </a>
+
+          <button class="action-btn position-relative m-3" aria-label="Notifications">
+            <i class="fa-solid fa-bell fs-5"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">5+</span>
+          </button>
+
+          <a th:href="@{/cart}" class="action-btn position-relative mx-3" aria-label="Shopping Cart">
+            <i class="fas fa-shopping-cart fs-5"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"
+                  th:text="${cartCount} ?: '0'">0</span>
+          </a>
+
+          <!-- User Dropdown -->
+          <div class="dropdown mx-3">
+            <button class="action-btn dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+              <i class="fas fa-user"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" id="dropdown">
+              <!-- Add user options here -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="mb-4 d-flex align-items-center gap-2 fs-5 fw-semibold text-dark">
+    <i class="fas fa-user-shield text-secondary"></i>
+    <span>Admin Portal</span>
+  </div>
+
+  <nav class="nav flex-column gap-2">
+    <a th:href="@{/dashboard}" class="nav-link active">
+      <i class="fas fa-tachometer-alt me-2"></i><span>Dashboard</span>
+    </a>
+    <a th:href="@{/productType/productTypePage}" class="nav-link">
+      <i class="fas fa-list me-2"></i><span>Product Type</span>
+    </a>
+    <a th:href="@{/productCategory/productCategoryPage}" class="nav-link">
+      <i class="fas fa-tags me-2"></i><span>Categories</span>
+    </a>
+    <a th:href="@{/warehouse/warehousePage}" class="nav-link">
+      <i class="fas fa-warehouse me-2"></i><span>Warehouses</span>
+    </a>
+    <a th:href="@{/product/productPage}" class="nav-link">
+      <i class="fas fa-box-open me-2"></i><span>Products</span>
+    </a>
+    <a th:href="@{/order/orderPage}" class="nav-link">
+      <i class="fas fa-shopping-cart me-2"></i><span>Orders</span>
+    </a>
+    <a th:href="@{/review/reviewPage}" class="nav-link">
+      <i class="fas fa-star me-2"></i><span>Reviews</span>
+    </a>
+    <a th:href="@{/payment/paymentPage}" class="nav-link">
+      <i class="fas fa-credit-card me-2"></i><span>Payments</span>
+    </a>
+    <a th:href="@{/user/userPage}" class="nav-link">
+      <i class="fas fa-users me-2"></i><span>Users</span>
+    </a>
+    <a th:href="@{/product/analyticsPage}" class="nav-link">
+      <i class="fas fa-chart-pie me-2"></i><span>Analytics</span>
+    </a>
+    <a th:href="@{/notification/notificationPage}" class="nav-link">
+      <i class="fas fa-bell me-2"></i><span>Notifications</span>
+    </a>
+    <a th:href="@{/address/addressPage}" class="nav-link">
+      <i class="fas fa-map-marker-alt me-2"></i><span>Address</span>
+    </a>
+    <a th:href="@{/user/settingsPage}" class="nav-link">
+      <i class="fas fa-cog me-2"></i><span>Settings</span>
+    </a>
+  </nav>
+
+  <div class="logout pt-3">
+    <a href="#" class="nav-link d-flex align-items-center gap-2 text-dark">
+      <i class="fas fa-sign-out-alt me-2"></i><span>Logout</span>
+    </a>
+  </div>
+</aside>
+
+
+
+<!-- Main Content -->
+<main class="main-content">
+  <div class="header-top mb-4">
+    <h3>Dashboard</h3>
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+      Export Report
+    </button>
+  </div>
+
+  <!-- Metrics -->
+  <div class="row g-4 mb-4">
+    <!-- Total Revenue -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card card-custom p-3 text-center">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="text-muted mb-0">Total Revenue</h6>
+          <i class="bi bi-currency-dollar fs-5"></i>
+        </div>
+        <h4 class="metric-value">$ 45,231.89</h4>
+        <p class="metric-change positive mb-0">+20.2% from last month</p>
+      </div>
+    </div>
+
+
+    <!-- Active Customer -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card card-custom p-3 text-center">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="text-muted mb-0">Active Customer</h6>
+          <i class="bi bi-person-lines-fill fs-5"></i>
+        </div>
+        <h4 class="metric-value">2,350</h4>
+        <p class="metric-change positive mb-0">+10.2% from last month</p>
+      </div>
+    </div>
+
+    <!-- Products -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card card-custom p-3 text-center">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="text-muted mb-0">Products</h6>
+          <i class="bi bi-bag fs-5"></i>
+        </div>
+        <h4 class="metric-value">1,250</h4>
+        <p class="metric-change positive mb-0">+5.8% from last month</p>
+      </div>
+    </div>
+
+    <!-- Orders -->
+    <div class="col-md-6 col-lg-3">
+      <div class="card card-custom p-3 text-center">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="text-muted mb-0">Orders</h6>
+          <i class="bi bi-cart-check fs-5"></i>
+        </div>
+        <h4 class="metric-value">980</h4>
+        <p class="metric-change positive mb-0">+8.3% from last month</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Customer Table -->
+  <div class="card">
+    <div class="container mt-4">
+      <div class="row g-3">
+        <!-- Sales Overview -->
+        <div class="col-lg-8 p-2">
+          <div class="card card-custom p-3 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h5 class="fw-bold mb-0">Sales Overview</h5>
+                <small class="text-muted">Monthly revenue and order trends.</small>
+              </div>
+              <div>
+                <button class="btn btn-sm btn-outline-secondary me-1">Monthly</button>
+                <button class="btn btn-sm btn-warning text-white">Yearly</button>
+              </div>
+            </div>
+
+            <div class="row text-center bg-light p-3 rounded mb-3">
+              <div class="col">
+                <h6 class="fw-bold text-success mb-0">$19,550</h6>
+                <small class="text-muted">Total Revenue</small>
+              </div>
+              <div class="col">
+                <h6 class="fw-bold text-success mb-0">1178</h6>
+                <small class="text-muted">Total Orders</small>
+              </div>
+              <div class="col">
+                <h6 class="fw-bold text-success mb-0">$16.60</h6>
+                <small class="text-muted">Avg order value</small>
+              </div>
+            </div>
+
+            <canvas id="salesChart" height="100"></canvas>
+          </div>
+        </div>
+
+        <div class="card border-info col-lg-4 p-2">
+          <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Recent Orders</h4>
+            <small class="text-white-50">Latest customer orders</small>
+          </div>
+          <div class="card-body p-0">
+            <table class="table table-striped table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">Order</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>ORD-12345</strong><br />John Doe</td>
+                  <td>
+                    <span class="badge bg-success d-flex align-items-center">
+                      <span class="rounded-circle me-2" style="width:10px; height:10px; background-color: #198754;"></span>
+                      Delivered
+                    </span>
+                  </td>
+                  <td>$149.88</td>
+                </tr>
+                <tr>
+                  <td><strong>ORD-12345</strong><br />John Doe</td>
+                  <td>
+                    <span class="badge bg-primary d-flex align-items-center">
+                      <span class="rounded-circle me-2" style="width:10px; height:10px; background-color: #0d6efd;"></span>
+                      Shipped
+                    </span>
+                  </td>
+                  <td>$149.88</td>
+                </tr>
+                <tr>
+                  <td><strong>ORD-12345</strong><br />John Doe</td>
+                  <td>
+                    <span class="badge bg-danger d-flex align-items-center">
+                      <span class="rounded-circle me-2" style="width:10px; height:10px; background-color: #dc3545;"></span>
+                      Canceled
+                    </span>
+                  </td>
+                  <td>$149.88</td>
+                </tr>
+                <tr>
+                  <td><strong>ORD-12345</strong><br />John Doe</td>
+                  <td>
+                    <span class="badge bg-warning text-dark d-flex align-items-center">
+                      <span class="rounded-circle me-2" style="width:10px; height:10px; background-color: #ffc107;"></span>
+                      Processing
+                    </span>
+                  </td>
+                  <td>$149.88</td>
+                </tr>
+                <tr>
+                  <td><strong>ORD-12345</strong><br />John Doe</td>
+                  <td>
+                    <span class="badge bg-success d-flex align-items-center">
+                      <span class="rounded-circle me-2" style="width:10px; height:10px; background-color: #198754;"></span>
+                      Delivered
+                    </span>
+                  </td>
+                  <td>$149.88</td>
+                </tr>
+                <tr>
+                  <td><strong>ORD-12345</strong><br />John Doe</td>
+                  <td>
+                    <span class="badge bg-primary d-flex align-items-center">
+                      <span class="rounded-circle me-2" style="width:10px; height:10px; background-color: #0d6efd;"></span>
+                      Shipped
+                    </span>
+                  </td>
+                  <td>$149.88</td>
+                </tr>
+                <tr>
+                  <td><strong>ORD-12345</strong><br />John Doe</td>
+                  <td>
+                    <span class="badge bg-danger d-flex align-items-center">
+                      <span class="rounded-circle me-2" style="width:10px; height:10px; background-color: #dc3545;"></span>
+                      Canceled
+                    </span>
+                  </td>
+                  <td>$149.88</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+      </div>
+
+</main>
+
+<!-- Add Customer Modal -->
+<div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addCustomerModalLabel">Add New Customer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control mb-2" placeholder="Full Name" required/>
+        <input type="email" class="form-control mb-2" placeholder="Email" required />
+        <select class="form-select">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Save Customer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script th:src="@{/js/index.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const ctx = document.getElementById('salesChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['0', '1', '2', '3', '4', '5', '6'],
+      datasets: [
+        {
+          label: 'Revenue',
+          data: [300, 200, 900, 400, 700, 300, 600],
+          backgroundColor: '#264653'
+        },
+        {
+          label: 'Orders',
+          data: [250, 600, 850, 150, 300, 200, 580],
+          backgroundColor: '#a8dadc'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            usePointStyle: true
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 250
+          }
+        }
+      }
+    }
+  });
+
+</script>
+</body>
+</html>
