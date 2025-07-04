@@ -15,9 +15,8 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Table(name = "productcategory")
 public class ProductCategory extends AbstractBaseEntity {
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private EProductCategory productCategory;
+    @Column(nullable = false, unique = true)
+    private String productCategory;
     @ManyToOne
     @JoinColumn(name = "ProductType_id")
     private ProductType productType;

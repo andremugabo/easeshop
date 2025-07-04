@@ -2,6 +2,7 @@ package com.ma.codinglab.shopease.controller;
 
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -41,6 +42,10 @@ public class ShopEaseRouterController {
     @GetMapping("/verifyOtp")
     public String verifyOtp(){
         return "auth/verify-otp";
+    }
+    @GetMapping("/dashboard")
+    public String getDashboard(Model model){
+        return "admin/dashboardPage";
     }
 
 }
