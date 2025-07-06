@@ -123,27 +123,45 @@ main {
     }
 
     .sidebar {
-      width: 220px;
-      position: fixed;
-      top: 60px;
-      left: 0;
-      height: 100%;
-      background: #fff;
-      padding: 2rem 1rem;
-      border-right: 1px solid #ddd;
-    }
+           width: max-content;
+            min-width: 200px;
+            padding: 1rem;
+            background-color: #f8f9fa; /* light gray */
+            border-right: 1px solid #dee2e6;
+        }
 
-    .sidebar a {
-      display: block;
-      padding: 0.5rem 1rem;
-      color: #333;
-      text-decoration: none;
-    }
+        .sidebar .nav-link {
+          display: flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            color: #343a40;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+            border-radius: 0.375rem;
+        }
 
-    .sidebar a.active {
-      background-color: #e0f7e9;
-      font-weight: 600;
-    }
+        .sidebar .nav-link:hover {
+          color: #fd7e14; /* orange-500 */
+        }
+
+        .sidebar .nav-link.active {
+          background-color: #fd7e14;
+          color: #fff !important;
+        }
+        .sidebar i {
+          width: 20px;
+          text-align: center;
+        }
+    
+        .sidebar .logout {
+          margin-top: auto;
+          padding-top: 2rem;
+        }
+
+        .sidebar .logout a:hover {
+          color: #dc3545;
+        }
 
     .main-content {
       margin-left: 240px;
@@ -166,6 +184,48 @@ main {
     .action-dropdown {
       cursor: pointer;
     }
+    canvas {
+      background-color: #fff;
+      border-radius: 0.5rem;
+    }
+.card-custom {
+  border-radius: 0.75rem;
+  box-shadow: 0 0.125rem 0.75rem rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+.card-custom:hover {
+  transform: translateY(-2px);
+}
+
+.metric-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.metric-change.positive {
+  color: #1dbf73;
+}
+.metric-change.negative {
+  color: #f44336;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.status-available {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-outofstock {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
 
 .footer-style{
     background-color: var(--green);

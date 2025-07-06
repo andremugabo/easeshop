@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Manage product types in ShopEase" />
+  <link rel="icon" type="image/png" th:href="@{/images/logo.png}" />
+  <title>Product Types – ShopEase</title>
+
+  <!-- Bootstrap & Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .action-btn {
+      background: transparent;
+      border: none;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .sidebar {
+      width: 220px;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      height: 100%;
+      background: #fff;
+      padding: 2rem 1rem;
+      border-right: 1px solid #ddd;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: #333;
+      text-decoration: none;
+    }
+
+    .sidebar a.active {
+      background-color: #e0f7e9;
+      font-weight: 600;
+    }
+
+    .main-content {
+      margin-left: 240px;
+      padding: 2rem;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .action-dropdown {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+<!-- Header -->
+<header class="bg-white sticky-top shadow-sm">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg py-1">
+      <!-- Logo -->
+      <a th:href="@{/}" class="navbar-brand d-flex align-items-center fw-semibold fs-4">
+        <i class="fas fa-cart-shopping text-success me-2"></i> ShopEase
+      </a>
+
+      <!-- Mobile Toggle -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navigation Links -->
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/categories}">Categories</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/products}">All Products</a></li>
+          <li class="nav-item"><a class="nav-link text-danger fw-semibold" th:href="@{/sales}">Sale</a></li>
+        </ul>
+
+        <!-- Search -->
+        <form class="d-flex me-3" th:action="@{/search}" method="get" role="search">
+          <input class="form-control me-2" type="search" name="query" placeholder="Search products..." />
+          <button class="btn btn-outline-primary" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+
+        <!-- Action Icons -->
+        <div class="d-flex align-items-center gap-2">
+          <a th:href="@{/wishlist}" class="action-btn" aria-label="Wishlist">
+            <i class="far fa-heart fs-5"></i>
+          </a>
+
+          <button class="action-btn position-relative m-3" aria-label="Notifications">
+            <i class="fa-solid fa-bell fs-5"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">5+</span>
+          </button>
+
+          <a th:href="@{/cart}" class="action-btn position-relative mx-3" aria-label="Shopping Cart">
+            <i class="fas fa-shopping-cart fs-5"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"
+                  th:text="${cartCount} ?: '0'">0</span>
+          </a>
+
+          <!-- User Dropdown -->
+          <div class="dropdown mx-3">
+            <button class="action-btn dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+              <i class="fas fa-user"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" id="dropdown">
+              <!-- Add user options here -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="mb-4 d-flex align-items-center gap-2 fs-5 fw-semibold text-dark">
+    <i class="fas fa-user-shield text-secondary"></i>
+    <span>Admin Portal</span>
+  </div>
+
+  <nav class="nav flex-column gap-2">
+    <a th:href="@{/dashboard}" class="nav-link">
+      <i class="fas fa-tachometer-alt me-2"></i><span>Dashboard</span>
+    </a>
+    <a th:href="@{/productType/productTypePage}" class="nav-link">
+      <i class="fas fa-list me-2"></i><span>Product Type</span>
+    </a>
+    <a th:href="@{/productCategory/productCategoryPage}" class="nav-link">
+      <i class="fas fa-tags me-2"></i><span>Categories</span>
+    </a>
+    <a th:href="@{/warehouse/warehousePage}" class="nav-link active">
+      <i class="fas fa-warehouse me-2"></i><span>Warehouses</span>
+    </a>
+    <a th:href="@{/product/productPage}" class="nav-link">
+      <i class="fas fa-box-open me-2"></i><span>Products</span>
+    </a>
+    <a th:href="@{/order/orderPage}" class="nav-link">
+      <i class="fas fa-shopping-cart me-2"></i><span>Orders</span>
+    </a>
+    <a th:href="@{/review/reviewPage}" class="nav-link">
+      <i class="fas fa-star me-2"></i><span>Reviews</span>
+    </a>
+    <a th:href="@{/payment/paymentPage}" class="nav-link">
+      <i class="fas fa-credit-card me-2"></i><span>Payments</span>
+    </a>
+    <a th:href="@{/user/userPage}" class="nav-link">
+      <i class="fas fa-users me-2"></i><span>Users</span>
+    </a>
+    <a th:href="@{/product/analyticsPage}" class="nav-link">
+      <i class="fas fa-chart-pie me-2"></i><span>Analytics</span>
+    </a>
+    <a th:href="@{/notification/notificationPage}" class="nav-link">
+      <i class="fas fa-bell me-2"></i><span>Notifications</span>
+    </a>
+    <a th:href="@{/address/addressPage}" class="nav-link">
+      <i class="fas fa-map-marker-alt me-2"></i><span>Address</span>
+    </a>
+    <a th:href="@{/user/settingsPage}" class="nav-link">
+      <i class="fas fa-cog me-2"></i><span>Settings</span>
+    </a>
+  </nav>
+
+  <div class="logout pt-3">
+    <a href="#" class="nav-link d-flex align-items-center gap-2 text-dark">
+      <i class="fas fa-sign-out-alt me-2"></i><span>Logout</span>
+    </a>
+  </div>
+</aside>
+
+
+<!-- Main Content -->
+<main class="main-content">
+  <div class="header-top mb-4">
+    <h3>Product Category</h3>
+    <button type="button" class="btn btn-success d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#addWarehouseModal">
+      <i class="fa fa-plus-circle"></i>
+      Add Warehouse
+    </button>
+
+  </div>
+
+  <div class="alert alert-success" role="alert" th:if="${message}">
+    <h4 th:text="${message}"></h4>
+  </div>
+
+  <div class="alert alert-danger" role="alert" th:if="${error}">
+    <h4 th:text="${error}"></h4>
+  </div>
+
+
+  <!-- Table -->
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Manage Warehouse</h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle text-nowrap">
+          <thead class="table-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Warehouse Name</th>
+            <th scope="col">Location</th>
+            <th scope="col">Reg. Number</th>
+            <th scope="col" class="text-end">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="warehouse, stat : ${theWarehouses}">
+            <th scope="row" th:text="${stat.count}">1</th>
+            <td th:text="${warehouse.name}">Main Warehouse</td>
+            <td th:text="${warehouse.location}">Kigali</td>
+            <td th:text="${warehouse.regNumber}">WH-001</td>
+            <td class="text-end">
+              <div class="dropdown">
+                <button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Actions
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item" th:href="@{/warehouses/edit/{id}(id=${warehouse.id})}">
+                      ✏️ Edit
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item text-danger" th:href="@{/warehouses/delete/{id}(id=${warehouse.id})}"
+                       onclick="return confirm('Are you sure you want to delete this warehouse?');">
+                      🗑️ Delete
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal: Add Product Type -->
+<div class="modal fade" id="addWarehouseModal" tabindex="-1" aria-labelledby="addWarehouseModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form class="modal-content needs-validation" th:action="@{/warehouse/createWarehouse}" method="post" th:object="${oneTheWarehouse}" novalidate>
+      <div class="modal-header">
+        <h5 class="modal-title" id="addWarehouseModalLabel">Add New Warehouse</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Warehouse Name -->
+        <div class="mb-3">
+          <label for="warehouseName" class="form-label">Warehouse Name</label>
+          <input type="text" id="warehouseName" class="form-control" th:field="*{name}" placeholder="Enter warehouse name" required />
+          <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-3">
+          <label for="location" class="form-label">Location</label>
+          <input type="text" id="location" class="form-control" th:field="*{location}" placeholder="Enter location" required />
+          <div class="text-danger" th:if="${#fields.hasErrors('location')}" th:errors="*{location}"></div>
+        </div>
+
+        <!-- Registration Number -->
+<!--        <div class="mb-3">-->
+<!--          <label for="regNumber" class="form-label">Registration Number</label>-->
+<!--          <input type="text" id="regNumber" class="form-control" th:field="*{regNumber}" placeholder="Enter registration number" required />-->
+<!--          <div class="text-danger" th:if="${#fields.hasErrors('regNumber')}" th:errors="*{regNumber}"></div>-->
+<!--        </div>-->
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Save Warehouse</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- Scripts -->
+<script th:src="@{/js/index.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
