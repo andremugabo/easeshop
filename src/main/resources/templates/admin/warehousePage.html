@@ -145,10 +145,10 @@
     <a th:href="@{/productType/productTypePage}" class="nav-link">
       <i class="fas fa-list me-2"></i><span>Product Type</span>
     </a>
-    <a th:href="@{/productCategory/productCategoryPage}" class="nav-link active">
+    <a th:href="@{/productCategory/productCategoryPage}" class="nav-link">
       <i class="fas fa-tags me-2"></i><span>Categories</span>
     </a>
-    <a th:href="@{/warehouse/warehousePage}" class="nav-link">
+    <a th:href="@{/warehouse/warehousePage}" class="nav-link active">
       <i class="fas fa-warehouse me-2"></i><span>Warehouses</span>
     </a>
     <a th:href="@{/product/productPage}" class="nav-link">
@@ -192,9 +192,11 @@
 <main class="main-content">
   <div class="header-top mb-4">
     <h3>Product Category</h3>
-    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProductTypeModal">
-      + Add Warehouse
+    <button type="button" class="btn btn-success d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#addWarehouseModal">
+      <i class="fa fa-plus-circle"></i>
+      Add Warehouse
     </button>
+
   </div>
 
   <div class="alert alert-success" role="alert" th:if="${message}">
@@ -211,59 +213,91 @@
     <div class="card-body">
       <h5 class="card-title">Manage Warehouse</h5>
       <div class="table-responsive">
-        <table class="table align-middle">
+        <table class="table table-hover align-middle text-nowrap">
           <thead class="table-light">
           <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Product Type</th>
-            <th>Actions</th>
+            <th scope="col">#</th>
+            <th scope="col">Warehouse Name</th>
+            <th scope="col">Location</th>
+            <th scope="col">Reg. Number</th>
+            <th scope="col" class="text-end">Actions</th>
           </tr>
           </thead>
           <tbody>
-          <tr th:each="type, stat : ${productTypes}">
-            <td th:text="${stat.count}">1</td>
-            <td th:text="${type.name}">Electronics</td>
-            <td th:text="${type.description}">Electronic devices and gadgets</td>
-            <td>
+          <tr th:each="warehouse, stat : ${theWarehouses}">
+            <th scope="row" th:text="${stat.count}">1</th>
+            <td th:text="${warehouse.name}">Main Warehouse</td>
+            <td th:text="${warehouse.location}">Kigali</td>
+            <td th:text="${warehouse.regNumber}">WH-001</td>
+            <td class="text-end">
               <div class="dropdown">
-                <span class="action-dropdown" data-bs-toggle="dropdown">⋯</span>
+                <button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Actions
+                </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" th:href="@{/product-types/edit/{id}(id=${type.id})}">✏️ Edit</a></li>
-                  <li><a class="dropdown-item text-danger" th:href="@{/product-types/delete/{id}(id=${type.id})}">🗑️ Delete</a></li>
+                  <li>
+                    <a class="dropdown-item" th:href="@{/warehouses/edit/{id}(id=${warehouse.id})}">
+                      ✏️ Edit
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item text-danger" th:href="@{/warehouses/delete/{id}(id=${warehouse.id})}"
+                       onclick="return confirm('Are you sure you want to delete this warehouse?');">
+                      🗑️ Delete
+                    </a>
+                  </li>
                 </ul>
               </div>
             </td>
           </tr>
           </tbody>
         </table>
+
       </div>
     </div>
   </div>
 </main>
 
 <!-- Modal: Add Product Type -->
-<div class="modal fade" id="addProductTypeModal" tabindex="-1" aria-labelledby="addProductTypeModalLabel" aria-hidden="true">
+<div class="modal fade" id="addWarehouseModal" tabindex="-1" aria-labelledby="addWarehouseModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form class="modal-content" th:action="@{/productType/productTypePage}" method="post" th:object="${theProductType}">
+    <form class="modal-content needs-validation" th:action="@{/warehouse/createWarehouse}" method="post" th:object="${oneTheWarehouse}" novalidate>
       <div class="modal-header">
-        <h5 class="modal-title" id="addProductTypeModalLabel">Add New Product Type</h5>
+        <h5 class="modal-title" id="addWarehouseModalLabel">Add New Warehouse</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <div class="modal-body">
-        <input type="text" class="form-control mb-3" th:field="*{productType}" placeholder="Type Name"  />
-        <p th:if="${#fields.hasErrors('productType')}" th:errorclass="text-danger"
-           th:errors="*{productType}"></p>
-        <textarea class="form-control" th:field="*{description}" placeholder="Description" rows="3"></textarea>
-        <p th:if="${#fields.hasErrors('description')}" th:errorclass="text-danger"
-           th:errors="*{description}"></p>
+        <!-- Warehouse Name -->
+        <div class="mb-3">
+          <label for="warehouseName" class="form-label">Warehouse Name</label>
+          <input type="text" id="warehouseName" class="form-control" th:field="*{name}" placeholder="Enter warehouse name" required />
+          <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-3">
+          <label for="location" class="form-label">Location</label>
+          <input type="text" id="location" class="form-control" th:field="*{location}" placeholder="Enter location" required />
+          <div class="text-danger" th:if="${#fields.hasErrors('location')}" th:errors="*{location}"></div>
+        </div>
+
+        <!-- Registration Number -->
+<!--        <div class="mb-3">-->
+<!--          <label for="regNumber" class="form-label">Registration Number</label>-->
+<!--          <input type="text" id="regNumber" class="form-control" th:field="*{regNumber}" placeholder="Enter registration number" required />-->
+<!--          <div class="text-danger" th:if="${#fields.hasErrors('regNumber')}" th:errors="*{regNumber}"></div>-->
+<!--        </div>-->
       </div>
+
       <div class="modal-footer">
-        <button type="submit" class="btn btn-success">Save Type</button>
+        <button type="submit" class="btn btn-success">Save Warehouse</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
       </div>
     </form>
   </div>
 </div>
+
 
 <!-- Scripts -->
 <script th:src="@{/js/index.js}"></script>

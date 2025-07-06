@@ -208,6 +208,25 @@ main {
   color: #f44336;
 }
 
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.status-available {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-outofstock {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+
 .footer-style{
     background-color: var(--green);
 }

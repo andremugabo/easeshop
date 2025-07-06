@@ -216,15 +216,17 @@
           <tr>
             <th>#</th>
             <th>Name</th>
+            <th>Description</th>
             <th>Product Type</th>
             <th>Actions</th>
           </tr>
           </thead>
           <tbody>
-          <tr th:each="type, stat : ${productTypes}">
+          <tr th:each="type, stat : ${theProductCategory}">
             <td th:text="${stat.count}">1</td>
-            <td th:text="${type.name}">Electronics</td>
+            <td th:text="${type.productCategory}">Electronics</td>
             <td th:text="${type.description}">Electronic devices and gadgets</td>
+            <td th:text="${type.productType.getProductType()}">Electronics</td>
             <td>
               <div class="dropdown">
                 <span class="action-dropdown" data-bs-toggle="dropdown">⋯</span>
@@ -245,21 +247,26 @@
 <!-- Modal: Add Product Type -->
 <div class="modal fade" id="addProductTypeModal" tabindex="-1" aria-labelledby="addProductTypeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form class="modal-content" th:action="@{/productCategory/productCategoryPage}" method="post" th:object="${theCategory}">
+    <form class="modal-content" th:action="@{/productCategory/addCategory}" method="post" th:object="${theCategory}">
       <div class="modal-header">
         <h5 class="modal-title" id="addProductTypeModalLabel">Add New Product Type</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <input type="text" class="form-control mb-3" th:field="*{productCategory}" placeholder="Type Name"  />
-        <p th:if="${#fields.hasErrors('productType')}" th:errorclass="text-danger"
-           th:errors="*{productCategory}"></p>
-        <textarea class="form-control" th:field="*{productCategory}" placeholder="Description" rows="3"></textarea>
-        <p th:if="${#fields.hasErrors('productCategory')}" th:errorclass="text-danger"
-           th:errors="*{productCategory}"></p>
+        <!-- Category Name -->
+        <input type="text" class="form-control mb-3" th:field="*{productCategory}" placeholder="Category Name" required/>
+        <p th:if="${#fields.hasErrors('productCategory')}" th:errorclass="text-danger" th:errors="*{productCategory}"></p>
+        <!-- Description -->
+        <textarea class="form-control" th:field="*{description}" placeholder="Description" rows="3"></textarea>
+        <p th:if="${#fields.hasErrors('description')}" th:errorclass="text-danger" th:errors="*{description}"></p>
+        <!-- Product type Dropdown        -->
+        <select class="form-control mt-3" th:field="*{productType}" required>
+          <option value="" disabled selected>Select a Product Type</option>
+          <option th:each="type : ${productTypes}" th:value="${type.id}" th:text="${type.productType}">Product Type</option>
+        </select>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-success">Save Type</button>
+        <button type="submit" class="btn btn-success">Save Category</button>
       </div>
     </form>
   </div>

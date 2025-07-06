@@ -249,6 +249,7 @@
           <thead class="table-light">
           <tr>
             <th>#</th>
+            <th>Image</th>
             <th>Product</th>
             <th>Category</th>
             <th>Stock</th>
@@ -258,29 +259,48 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="product, stat : ${products}">
+          <tr th:each="product, stat : ${theProducts}">
             <td th:text="${stat.count}"></td>
-            <td th:text="${product.name}"></td>
-            <td th:text="${product.category.name}"></td>
-            <td th:text="${product.quantity}"></td>
-            <td th:text="${product.price + ' Frw'}"></td>
             <td>
-              <span class="status-badge" th:classappend="${product.quantity > 0} ? 'status-available' : 'status-outofstock'">
-                <span th:text="${product.quantity > 0 ? 'Available' : 'Out of Stock'}"></span>
+              <img th:src="@{${product.image}}" alt="Product Image" width="100" height="100"/>
+            </td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.category != null ? product.category.productCategory : 'No Category'}"></td>
+            <td th:text="${product.quantity}"></td>
+            <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT') + ' Frw'}"></td>
+            <td class="text-center">
+              <span th:if="${product.active}" class="badge bg-success d-flex align-items-center justify-content-center">
+                <span class="rounded-circle me-2"
+                      style="width:10px; height:10px; background-color: #198754;"></span>
+                Active
+              </span>
+                          <span th:if="${!product.active}" class="badge bg-danger d-flex align-items-center justify-content-center">
+                <span class="rounded-circle me-2"
+                      style="width:10px; height:10px; background-color: #dc3545;"></span>
+                Inactive
               </span>
             </td>
+
+
             <td>
               <div class="dropdown">
-                <span class="action-dropdown" data-bs-toggle="dropdown">⋯</span>
+                <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Actions
+                </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">👁️ View Details</a></li>
-                  <li><a class="dropdown-item" href="#">✏️ Edit Product</a></li>
+                  <li>
+                    <a class="dropdown-item" th:href="@{'/products/' + ${product.id}}">👁️ View Details</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" th:href="@{'/products/edit/' + ${product.id}}">✏️ Edit Product</a>
+                  </li>
                 </ul>
               </div>
             </td>
           </tr>
           </tbody>
         </table>
+
       </div>
     </div>
   </div>
@@ -289,42 +309,97 @@
 <!-- Add Product Modal -->
 <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
-    <form class="modal-content" th:action="@{/products}" method="post" enctype="multipart/form-data">
+    <form class="modal-content" th:action="@{/product/createProduct}" th:object="${getProduct}" method="post" enctype="multipart/form-data">
       <div class="modal-header">
         <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <div class="modal-body">
         <div class="row g-3">
+          <!-- Product Name -->
           <div class="col-md-6">
-            <input name="name" type="text" class="form-control" placeholder="Product Name" required />
+            <label for="name" class="form-label">Product Name</label>
+            <input th:field="*{name}" id="name" type="text" class="form-control" placeholder="Product Name" required />
           </div>
+
+          <!-- Price -->
           <div class="col-md-6">
-            <input name="price" type="number" class="form-control" placeholder="Price" required />
+            <label for="price" class="form-label">Price</label>
+            <input th:field="*{price}" id="price" type="number" step="0.01" class="form-control" placeholder="Price" required />
           </div>
+
+          <!-- Quantity -->
           <div class="col-md-6">
-            <input name="quantity" type="number" class="form-control" placeholder="Stock Quantity" required />
+            <label for="quantity" class="form-label">Stock Quantity</label>
+            <input th:field="*{quantity}" id="quantity" type="number" class="form-control" placeholder="Stock Quantity" required />
           </div>
+
+          <!-- Manufactured Date -->
           <div class="col-md-6">
-            <select name="categoryId" class="form-select" required>
-              <option value="">Select Category</option>
-              <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+            <label for="manufacturedDate" class="form-label">Manufactured Date</label>
+            <input th:field="*{manufacturedDate}" id="manufacturedDate" type="date" class="form-control" />
+          </div>
+
+          <!-- Expiration Date -->
+          <div class="col-md-6">
+            <label for="expirationDate" class="form-label">Expiration Date</label>
+            <input th:field="*{expirationDate}" id="expirationDate" type="date" class="form-control" />
+          </div>
+
+          <!-- Warehouse Dropdown -->
+          <div class="col-md-6">
+            <label for="warehouse" class="form-label">Warehouse</label>
+            <select th:field="*{warehouseId}" id="warehouse" class="form-select" required>
+              <option value="">Select Warehouse</option>
+              <option th:each="wh : ${warehouses}" th:value="${wh.id}" th:text="${wh.name}"></option>
             </select>
           </div>
-          <div class="col-12">
-            <textarea name="description" class="form-control" placeholder="Product Description" rows="3"></textarea>
+
+          <!-- Category Dropdown -->
+          <div class="col-md-12">
+            <label for="category" class="form-label">Category</label>
+            <select name="productCategoryIds" id="category" class="form-select" required>
+              <option value="">Select Category</option>
+              <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.productCategory}"></option>
+            </select>
           </div>
+
+          <!-- Description -->
           <div class="col-12">
-            <input name="image" type="file" class="form-control" />
+            <label for="details" class="form-label">Product Description</label>
+            <textarea th:field="*{details}" id="details" class="form-control" placeholder="Product Description" rows="3"></textarea>
+          </div>
+
+          <!-- Feature -->
+          <div class="col-12">
+            <label for="feature" class="form-label">Product Feature</label>
+            <textarea th:field="*{feature}" id="feature" class="form-control" placeholder="Product Feature" rows="2"></textarea>
+          </div>
+
+          <!-- Specifications -->
+          <div class="col-12">
+            <label for="specifications" class="form-label">Product Specifications</label>
+            <textarea th:field="*{specifications}" id="specifications" class="form-control" placeholder="Product Specifications" rows="2"></textarea>
+          </div>
+
+          <!-- Image -->
+          <div class="col-12">
+            <label for="imageFile" class="form-label">Product Image</label>
+            <input name="imageFile" th:field="*{image}" id="imageFile" type="file" class="form-control" required/>
           </div>
         </div>
       </div>
+
       <div class="modal-footer">
         <button type="submit" class="btn btn-success">Save Product</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
       </div>
     </form>
+
   </div>
 </div>
+
 
 <!-- Scripts -->
 <script th:src="@{/js/index.js}"></script>

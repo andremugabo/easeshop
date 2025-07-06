@@ -39,6 +39,7 @@ public class ProductTypeController {
         }else{
            model.addAttribute("error","Data not Saved !!!");
         }
+        model.addAttribute("theProductType", new ProductTypeDTO());
         return "redirect:/productType/productTypePage";
     }
 

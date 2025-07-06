@@ -19,9 +19,9 @@ import java.util.List;
 @Table(name = "product")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Product extends AbstractBaseEntity {
-    @Column(name = "product_name",nullable = false,unique = true)
+    @Column(name = "product_name", nullable = false, unique = true)
     private String name;
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String details;
     private double price;
     private String image;
@@ -37,7 +37,11 @@ public class Product extends AbstractBaseEntity {
     private List<Order> orders;
     @OneToMany(mappedBy = "product")
     private List<Review> reviews;
-    @OneToMany(mappedBy = "product")
-    private List<ProductCategory> productCategories;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private ProductCategory category;
+
+
 
 }
