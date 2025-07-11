@@ -10,4 +10,6 @@ public interface IUsersService {
     Users deleteUsers(Users theUser);
     List<Users> findAllUsers();
     List<Users> findUserByActive(Boolean active);
+
+    boolean existsByEmail(String email);
 }

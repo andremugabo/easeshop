@@ -16,7 +16,9 @@ import lombok.Setter;
 import com.ma.codinglab.shopease.core.address.model.Address;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -26,9 +28,10 @@ public class Users extends AbstractBaseEntity {
     private String firstname;
     @Column(name = "last_name",nullable = false)
     private String lastname;
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false)
-    private EUserRole userRole;
+    private Set<EUserRole> userRole = new HashSet<>();
     @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Column(name = "phone",nullable = false,unique = true)
