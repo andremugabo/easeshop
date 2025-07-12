@@ -28,10 +28,9 @@ public class Users extends AbstractBaseEntity {
     private String firstname;
     @Column(name = "last_name",nullable = false)
     private String lastname;
-    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false)
-    private Set<EUserRole> userRole = new HashSet<>();
+    private EUserRole userRole;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Column(name = "phone",nullable = false,unique = true)

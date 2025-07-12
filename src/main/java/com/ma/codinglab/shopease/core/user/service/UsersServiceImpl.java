@@ -4,11 +4,14 @@ import com.ma.codinglab.shopease.core.user.model.Users;
 import com.ma.codinglab.shopease.core.user.repository.IUserRepository;
 import com.ma.codinglab.shopease.core.util.user.EUserAuthProvider;
 import com.ma.codinglab.shopease.core.util.user.EUserRole;
+import com.ma.codinglab.shopease.core.util.user.HelperClass;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -17,6 +20,7 @@ public class UsersServiceImpl implements IUsersService{
 
     private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private  final MailService mailService;
 
     @Override
     public Users registerUser(Users theUser) {
@@ -33,8 +37,8 @@ public class UsersServiceImpl implements IUsersService{
             throw new IllegalArgumentException("Phone number is already in use");
         }
 
-        if(theUser.getUserRole() == null || theUser.getUserRole().isEmpty()){
-            theUser.setUserRole(Set.of(EUserRole.CUSTOMER));
+        if(theUser.getUserRole() == null){
+            theUser.setUserRole(EUserRole.CUSTOMER);
         }
 
         if(theUser.getAuthProvider() == null){
@@ -48,15 +52,24 @@ public class UsersServiceImpl implements IUsersService{
 
         theUser.setPassword(passwordEncoder.encode(theUser.getPassword()));
 
+        theUser.setOtpCode(HelperClass.hashOtp(HelperClass.generateOtp()));
+        theUser.setOtpExpiresAt(LocalDateTime.now().plusMinutes(30));
+        theUser.setOtpPurpose("EMAIL_VERIFICATION");
         theUser.setConfirmPassword(null);
 
+        Users savedUser = userRepository.save(theUser);
+
+        //Send email
+        String verificationLink = "http://localhost:8080/auth/verify?email=" + savedUser.getEmail() +
+                "&code=" + savedUser.getOtpCode();
+        mailService.sendVerificationEmail(savedUser.getEmail(),verificationLink);
 
         return userRepository.save(theUser);
     }
 
     @Override
     public Users updateUsers(Users theUser) {
-        return null;
+        return userRepository.save(theUser);
     }
 
     @Override
@@ -77,5 +90,10 @@ public class UsersServiceImpl implements IUsersService{
     @Override
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Optional<Users> findByEmail(String Email) {
+        return userRepository.findByEmail(Email);
     }
 }

@@ -26,18 +26,18 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/", "/login", "/signup", "/forgotPassword", "/resetPassword", "/verifyOtp",
-                                "/categories", "/products", "/sales","/auth/signup",
+                                "/", "/login", "/signup", "/forgotPassword", "/resetPassword", "/verify-otp",
+                                "/categories", "/products", "/sales","/auth/**",
                                 "/css/**", "/js/**", "/images/**", "/webjars/**"
                         ).permitAll()
                         .requestMatchers("/dashboard").hasRole("ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/customer/**").hasRole("CUSTOMER")
+                        .requestMatchers("/customer/index").hasRole("CUSTOMER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/dashboard", true)
+                        .defaultSuccessUrl("/customer/**", true)
                         .failureUrl("/login?error")
                         .permitAll()
                 )

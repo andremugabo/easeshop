@@ -34,14 +34,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             newUser.setFirstname(oAuth2User.getAttribute("given_name"));
             newUser.setLastname(oAuth2User.getAttribute("family_name"));
             newUser.setAuthProvider(EUserAuthProvider.GOOGLE);
-            newUser.setUserRole(Set.of(EUserRole.CUSTOMER));
+            newUser.setUserRole(EUserRole.CUSTOMER);
             return userRepository.save(newUser);
         });
 
         return new DefaultOAuth2User(
-                user.getUserRole().stream()
-                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
-                        .collect(Collectors.toList()),
+                Set.of(new SimpleGrantedAuthority("ROLE_" + user.getUserRole().name())),
                 oAuth2User.getAttributes(),
                 "email"
         );

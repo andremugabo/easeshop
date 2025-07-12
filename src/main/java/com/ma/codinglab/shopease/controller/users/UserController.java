@@ -7,12 +7,11 @@ import com.ma.codinglab.shopease.core.user.service.IUsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -49,8 +48,34 @@ public class UserController {
         }
 
         usersService.registerUser(theUser);
-        model.addAttribute("message", "Registration successful. You may now log in.");
+        model.addAttribute("message", "Registration successful. Verify your account before Login.");
         model.addAttribute("user", new Users());
         return "auth/signup";
     }
+
+    @GetMapping("/verify")
+    public String verifyUser(@RequestParam("email") String email,
+                             @RequestParam("code") String code, Model model){
+        Optional<Users> userOpt = usersService.findByEmail(email);
+        if(userOpt.isPresent()){
+            Users user = userOpt.get();
+            if(user.getOtpCode().equals(code) && user.getOtpExpiresAt().isAfter(LocalDateTime.now())){
+                user.setIsVerified(true);
+                user.setOtpCode(null);
+                user.setOtpExpiresAt(null);
+                user.setOtpPurpose(null);
+                usersService.updateUsers(user);
+                model.addAttribute("message","Email verified! You can now log in.");
+                return "auth/login";
+            }
+        }
+        model.addAttribute("error","Invalid or expired verification link.");
+        return "auth/signup";
+    }
+
+
+
+
+
+
 }

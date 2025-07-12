@@ -2,13 +2,19 @@ package com.ma.codinglab.shopease.controller;
 
 import com.ma.codinglab.shopease.core.customer.model.Customer;
 import com.ma.codinglab.shopease.core.user.model.Users;
+import com.ma.codinglab.shopease.core.user.service.IUsersService;
+import com.ma.codinglab.shopease.core.util.user.EUserRole;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequiredArgsConstructor
 public class ShopEaseRouterController {
+
+    private final IUsersService usersService;
 
     @GetMapping("/")
     public String homepage() {
@@ -31,13 +37,8 @@ public class ShopEaseRouterController {
     }
 
     @GetMapping("/login")
-    public String login(Model model, String error, String logout) {
-        if (error != null) {
-            model.addAttribute("loginError", true);
-        }
-        if (logout != null) {
-            model.addAttribute("logoutMessage", "You have been logged out successfully.");
-        }
+    public String getLoginForm(Model model) {
+        model.addAttribute("user", new Users());
         return "auth/login";
     }
 
@@ -52,11 +53,6 @@ public class ShopEaseRouterController {
         return "auth/reset-password";
     }
 
-    @GetMapping("/verifyOtp")
-    public String verifyOtp() {
-        return "auth/verify-otp";
-    }
-
     @GetMapping("/dashboard")
     public String getDashboard(Model model) {
         return "admin/dashboardPage";
@@ -68,7 +64,7 @@ public class ShopEaseRouterController {
     }
 
     @GetMapping("/signup")
-    public String showRegistrationFrom(Model model){
+    public String showRegistrationForm(Model model) {
         model.addAttribute("user", new Users());
         return "auth/signup";
     }

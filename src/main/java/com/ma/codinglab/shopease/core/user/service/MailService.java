@@ -19,4 +19,15 @@ public class MailService {
         message.setText("Click the following link to verify your email:\n\n" + verificationLink);
         mailSender.send(message);
     }
+
+
+    public void sendOtpEmail(String toEmail, String otpCode) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("Your Login OTP - ShopEase");
+        message.setText("Use this OTP to complete your login: " + otpCode + "\nIt expires in 90 seconds.");
+        mailSender.send(message);
+    }
+
+
 }
