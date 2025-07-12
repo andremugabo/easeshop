@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter @Setter
 @MappedSuperclass
-public class AbstractAuditEntity {
+public abstract class AbstractAuditEntity {
     @CreationTimestamp
     private LocalDateTime createdAt;
     @LastModifiedDate
