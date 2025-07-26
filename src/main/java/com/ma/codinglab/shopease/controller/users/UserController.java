@@ -55,23 +55,29 @@ public class UserController {
 
     @GetMapping("/verify")
     public String verifyUser(@RequestParam("email") String email,
-                             @RequestParam("code") String code, Model model){
+                             @RequestParam("code") String code, Model model) {
         Optional<Users> userOpt = usersService.findByEmail(email);
-        if(userOpt.isPresent()){
+        if (userOpt.isPresent()) {
             Users user = userOpt.get();
-            if(user.getOtpCode().equals(code) && user.getOtpExpiresAt().isAfter(LocalDateTime.now())){
-                user.setIsVerified(true);
-                user.setOtpCode(null);
-                user.setOtpExpiresAt(null);
-                user.setOtpPurpose(null);
-                usersService.updateUsers(user);
-                model.addAttribute("message","Email verified! You can now log in.");
-                return "auth/login";
+
+            // Safely check if OTP code and expiry exist
+            if (user.getOtpCode() != null && user.getOtpExpiresAt() != null) {
+                if (user.getOtpCode().equals(code) && user.getOtpExpiresAt().isAfter(LocalDateTime.now())) {
+                    user.setIsVerified(true);
+                    user.setOtpCode(null);
+                    user.setOtpExpiresAt(null);
+                    user.setOtpPurpose(null);
+                    usersService.updateUsers(user);
+                    model.addAttribute("message", "Email verified! You can now log in.");
+                    return "auth/login";
+                }
             }
         }
-        model.addAttribute("error","Invalid or expired verification link.");
+
+        model.addAttribute("error", "Invalid or expired verification link.");
         return "auth/signup";
     }
+
 
 
 

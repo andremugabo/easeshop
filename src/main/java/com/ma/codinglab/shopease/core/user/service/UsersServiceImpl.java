@@ -60,7 +60,7 @@ public class UsersServiceImpl implements IUsersService{
         Users savedUser = userRepository.save(theUser);
 
         //Send email
-        String verificationLink = "http://localhost:8080/auth/verify?email=" + savedUser.getEmail() +
+        String verificationLink = "http://localhost:9090/auth/verify?email=" + savedUser.getEmail() +
                 "&code=" + savedUser.getOtpCode();
         mailService.sendVerificationEmail(savedUser.getEmail(),verificationLink);
 

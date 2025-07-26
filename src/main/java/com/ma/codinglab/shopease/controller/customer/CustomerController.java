@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/customer")
 public class CustomerController {
 
-    @GetMapping("/")
+    @GetMapping("/index")
     public String display(Model model){
         return "/customer/index";
     }

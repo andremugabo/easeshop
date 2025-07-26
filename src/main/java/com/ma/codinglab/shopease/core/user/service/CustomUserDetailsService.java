@@ -3,40 +3,59 @@ package com.ma.codinglab.shopease.core.user.service;
 import com.ma.codinglab.shopease.core.user.model.Users;
 import com.ma.codinglab.shopease.core.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 
+/**
+ * Custom UserDetailsService implementation to load user data from database
+ * using either email or phone as username.
+ */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final IUserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Users> usersOptional;
-        if (username.contains("@")) {
-            usersOptional = userRepository.findByEmail(username);
-        } else {
-            usersOptional = userRepository.findByPhone(username);
+        log.info("Authenticating user: {}", username);
+
+        if (username == null || username.trim().isEmpty()) {
+            log.warn("Empty username provided");
+            throw new UsernameNotFoundException("Username cannot be empty");
         }
 
-        Users theUser = usersOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Optional<Users> userOptional = username.contains("@")
+                ? userRepository.findByEmail(username)
+                : userRepository.findByPhone(username);
 
-        if (!Boolean.TRUE.equals(theUser.getIsVerified())) {
-            throw new RuntimeException("Please verify your email first.");
+        Users user = userOptional.orElseThrow(() -> {
+            log.warn("User not found with identifier: {}", username);
+            return new UsernameNotFoundException("User not found with email or phone: " + username);
+        });
+
+        if (Boolean.FALSE.equals(user.getIsVerified())) {
+            log.warn("User {} has not verified their email.", username);
+            throw new DisabledException("Please verify your email before logging in.");
         }
+
+        String principal = username.contains("@") ? user.getEmail() : user.getPhone();
+
+        log.info("User {} authenticated successfully with role: {}", principal, user.getUserRole().name());
 
         return new org.springframework.security.core.userdetails.User(
-                theUser.getEmail(),
-                theUser.getPassword(),
-                Set.of(new SimpleGrantedAuthority("ROLE_" + theUser.getUserRole().name()))
+                principal,
+                user.getPassword(),
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getUserRole().name()))
         );
     }
 }
