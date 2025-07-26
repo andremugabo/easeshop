@@ -18,57 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/customer")
 public class CustomerController {
 
-    private final ICustomerService customerService;
-
-    @GetMapping("/signup")
-    public String showRegistrationFrom(Model model){
-        model.addAttribute("customer", new Customer());
-        return "auth/signup";
+    @GetMapping("/index")
+    public String display(Model model){
+        return "/customer/index";
     }
 
-
-    @ModelAttribute("customer")
-    public Customer customerModel() {
-        return new Customer();
-    }
-
-
-    @PostMapping("/signup")
-    public String registerCustomer(@ModelAttribute("customer") Customer theCustomer, Model model) {
-        System.out.println("POST /customer/register called with customer: " + theCustomer);
-        if (theCustomer.getEmail() == null || theCustomer.getEmail().isBlank()) {
-            model.addAttribute("error", "Registration failed! Email is required.");
-            model.addAttribute("customer", theCustomer);
-            return "auth/signup";
-        }
-
-        if (theCustomer.getPassword() == null || theCustomer.getConfirmPassword() == null ||
-                !theCustomer.getPassword().equals(theCustomer.getConfirmPassword())) {
-            model.addAttribute("error", "Passwords do not match!");
-            model.addAttribute("customer", theCustomer);
-            return "auth/signup";
-        }
-
-        customerService.registerCustomer(theCustomer);
-        model.addAttribute("message", "Customer registered successfully! You can log in now.");
-        model.addAttribute("customer", new Customer());
-        return "auth/signup";
-    }
-
-    @GetMapping("/customerPage")
-    public String customerPage(Model model){
-        List<Customer> customers = customerService.findCustomersByActive(Boolean.TRUE);
-        model.addAttribute("customers", customers);
-        return "admin/customerPage";
-    }
-
-    @GetMapping("/productPage")
-    public String productPage(Model model){
-        return"admin/productPage";
-    }
-
-//    @GetMapping("/productTypePage")
-//    public String productTypePage(Model model){
-//        return"admin/productTypePage";
-//    }
 }

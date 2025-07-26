@@ -3,6 +3,7 @@ package com.ma.codinglab.shopease.core.user.service;
 import com.ma.codinglab.shopease.core.user.model.Users;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUsersService {
     Users registerUser(Users theUser);
@@ -10,4 +11,6 @@ public interface IUsersService {
     Users deleteUsers(Users theUser);
     List<Users> findAllUsers();
     List<Users> findUserByActive(Boolean active);
+    boolean existsByEmail(String email);
+    Optional<Users> findByEmail(String Email);
 }

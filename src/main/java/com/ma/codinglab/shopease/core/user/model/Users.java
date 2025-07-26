@@ -16,7 +16,9 @@ import lombok.Setter;
 import com.ma.codinglab.shopease.core.address.model.Address;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
